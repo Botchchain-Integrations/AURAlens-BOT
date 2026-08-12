@@ -18,7 +18,7 @@ type WorkspaceView = "overview" | "strategies" | "developer";
 const viewMeta: Record<WorkspaceView, { label: string; title: string }> = {
   overview: { label: "Wallet overview", title: "What does this wallet need to know?" },
   strategies: { label: "AURA strategies", title: "What could be useful next?" },
-  developer: { label: "Developer integration", title: "How does the intelligence become UI?" },
+  developer: { label: "Developer integration", title: "Build wallet-aware experiences with AURA." },
 };
 
 export function DashboardWorkspace({ view, analysis, initialAddress, initialError = "" }: { view: WorkspaceView; analysis: AuraAnalysis | null; initialAddress: string; initialError?: string }) {
@@ -58,7 +58,7 @@ export function DashboardWorkspace({ view, analysis, initialAddress, initialErro
           <nav className="dashboard-nav" aria-label="Workspace navigation">
             <Link className={view === "overview" ? "active" : ""} href={`/dashboard${suffix}`}><LayoutDashboard size={16} /> Overview</Link>
             <Link className={view === "strategies" ? "active" : ""} href={`/dashboard/strategies${suffix}`}><Sparkles size={16} /> Strategies</Link>
-            <Link className={view === "developer" ? "active" : ""} href={`/dashboard/developer${suffix}`}><Settings2 size={16} /> Developer view</Link>
+            <Link className={view === "developer" ? "active" : ""} href={`/dashboard/developer${suffix}`}><Settings2 size={16} /> Developer integration</Link>
           </nav>
           <div className="sidebar-foot"><span className="status-dot" /> AURA API <b>LIVE</b><p>Recommendations are informational. Review protocols and risks before acting.</p></div>
         </aside>

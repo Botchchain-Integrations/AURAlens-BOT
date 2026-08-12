@@ -1,51 +1,95 @@
 "use client";
 
-import { useState } from "react";
-import { Braces, Code2 } from "lucide-react";
+import type { ReactNode } from "react";
+import { ArrowDown, ArrowUpRight, Braces, Layers3, Sparkles, WalletCards } from "lucide-react";
 import type { AuraAnalysis } from "@/lib/aura/types";
 
+function shortenAddress(address: string): string {
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+}
+
+function riskClass(risk: string): string {
+  const value = risk.toLowerCase();
+  if (value.includes("low")) return "risk-low";
+  if (value.includes("high")) return "risk-high";
+  return "risk-medium";
+}
+
 export function DeveloperPanel({ analysis }: { analysis: AuraAnalysis }) {
-  const [view, setView] = useState<"request" | "normalized">("request");
-  const endpoint = `/api/aura/strategies?address=${analysis.address}`;
-  const normalized = {
-    totalBalanceUSD: analysis.totalBalanceUSD,
-    networkCount: analysis.networkCount,
-    assetCount: analysis.assetCount,
-    strategies: analysis.strategies,
-  };
+  const endpoint = `https://aura.adex.network/api/portfolio/strategies?address=${analysis.address}`;
+  const rawResponse = JSON.stringify(analysis.raw, null, 2);
+  const previewStrategies = analysis.strategies.slice(0, 3);
 
   return (
     <section className="developer-panel" id="developer" aria-labelledby="developer-title">
-      <div className="section-heading developer-heading">
-        <div>
-          <p className="section-index">03 / Developer integration</p>
-          <h2 id="developer-title">Infrastructure into experience.</h2>
-        </div>
-        <div className="segmented-control" aria-label="Developer data view">
-          <button type="button" className={view === "request" ? "active" : ""} onClick={() => setView("request")}>
-            <Code2 size={15} /> Request
-          </button>
-          <button type="button" className={view === "normalized" ? "active" : ""} onClick={() => setView("normalized")}>
-            <Braces size={15} /> Normalized
-          </button>
+      <div className="developer-hero">
+        <p className="section-index">03 / Developer integration</p>
+        <h2 id="developer-title">Give your Web3 application wallet intelligence.</h2>
+        <p className="developer-lede">AuraLens uses the public AURA API to transform wallet context and AI-generated strategies into an application-specific experience.</p>
+        <div className="developer-identity"><WalletCards size={16} /><span>{shortenAddress(analysis.address)}</span><b>{analysis.assetCount} assets · {analysis.networkCount} networks · {analysis.strategies.length} strategies</b></div>
+      </div>
+
+      <div className="developer-flow-heading"><span>From infrastructure</span><ArrowDown size={14} /><strong>Into experience</strong></div>
+      <div className="developer-flow" aria-label="AuraLens integration flow">
+        <FlowNode icon={<WalletCards size={17} />} label="Wallet" detail={shortenAddress(analysis.address)} />
+        <FlowConnector />
+        <FlowNode icon={<Sparkles size={17} />} label="AURA API" detail="Raw wallet intelligence" accent />
+        <FlowConnector />
+        <FlowNode icon={<Layers3 size={17} />} label="AuraLens" detail="Application layer" />
+        <FlowConnector />
+        <div className="developer-flow-output">
+          <span>Application experience</span>
+          <div><b>Portfolio</b><b>Strategies</b><b>Risk context</b><b>Opportunities</b></div>
         </div>
       </div>
 
-      <div className="code-window">
-        <div className="code-meta">
-          <span>GET</span>
-          <span>{view === "request" ? "route.ts" : "AuraAnalysis"}</span>
+      <div className="developer-section developer-request">
+        <div className="developer-section-heading"><span>01</span><div><h3>Request</h3><p>Send an EVM address to AURA and retrieve wallet intelligence.</p></div></div>
+        <div className="code-window">
+          <div className="code-meta"><span>GET</span><span>public AURA endpoint</span></div>
+          <pre><code>{endpoint}</code></pre>
         </div>
-        {view === "request" ? (
-          <pre><code>{`const response = await fetch(
-  "${endpoint}"
-);
+      </div>
 
-const intelligence = await response.json();`}</code></pre>
-        ) : (
-          <pre><code>{JSON.stringify(normalized, null, 2)}</code></pre>
-        )}
+      <div className="developer-section developer-response">
+        <div className="developer-section-heading"><span>02</span><div><h3>Response</h3><p>The evidence behind this application experience.</p></div></div>
+        <details className="raw-response">
+          <summary><span><Braces size={16} />{analysis.assetCount} assets · {analysis.networkCount} networks · {analysis.strategies.length} strategies</span><b>View raw response <ArrowDown size={15} /></b></summary>
+          <div className="code-window"><div className="code-meta"><span>JSON</span><span>AURA response</span></div><pre><code>{rawResponse}</code></pre></div>
+        </details>
+      </div>
+
+      <div className="developer-section developer-ux">
+        <div className="developer-section-heading"><span>03</span><div><h3>Turn intelligence into product UX</h3><p>AURA supplies the recommendation. AuraLens decides how it becomes useful to a person.</p></div></div>
+        <div className="recommendation-heading"><span>AURA recommends</span><small><Sparkles size={14} /> Generated by AURA · Rendered by AuraLens</small></div>
+        <div className="recommendation-grid">
+          {previewStrategies.map((strategy, index) => (
+            <article className={`recommendation-card recommendation-card-${index + 1}`} key={`${strategy.name}-${index}`}>
+              <div className="recommendation-card-top"><span>0{index + 1}</span><span className={`risk-label ${riskClass(strategy.risk)}`}>{strategy.risk}</span></div>
+              <h4>{strategy.name}</h4>
+              <p>{strategy.description ?? "A contextual opportunity identified from this wallet's portfolio."}</p>
+              <div className="recommendation-meta">{strategy.apy === undefined ? "Review opportunity" : `${strategy.apy.toFixed(2)}% estimated APY`}{strategy.network ? ` · ${strategy.network}` : ""}</div>
+            </article>
+          ))}
+          {previewStrategies.length === 0 && <div className="recommendation-empty">AURA returned wallet context but no strategies for this address.</div>}
+        </div>
+      </div>
+
+      <div className="developer-takeaway">
+        <p className="section-index">Why this matters</p>
+        <h3>Developers do not need to build wallet intelligence from scratch.</h3>
+        <p><strong>AURA provides the intelligence. AuraLens provides the experience.</strong> Your application decides how that intelligence becomes useful to users.</p>
+        <div className="takeaway-equation"><strong>Your app</strong><span>+</span><strong>AURA intelligence</strong><span>=</span><b>Wallet-aware UX</b></div>
+        <a className="source-link" href="https://aura.adex.network" target="_blank" rel="noreferrer">Explore AURA <ArrowUpRight size={15} /></a>
       </div>
     </section>
   );
+}
+
+function FlowNode({ icon, label, detail, accent = false }: { icon: ReactNode; label: string; detail: string; accent?: boolean }) {
+  return <div className={`developer-flow-node ${accent ? "accent" : ""}`}><span className="developer-flow-icon">{icon}</span><div><small>{label}</small><strong>{detail}</strong></div></div>;
+}
+
+function FlowConnector() {
+  return <div className="developer-flow-connector"><i /><ArrowDown size={14} /></div>;
 }
