@@ -1,5 +1,5 @@
-import { AuraDashboard } from "@/components/aura-dashboard";
+import { LandingPage } from "@/components/landing-page";
 
 export default function Home() {
-  return <AuraDashboard />;
+  return <LandingPage />;
 }
