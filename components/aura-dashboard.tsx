@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { ArrowRight, RotateCcw, ScanSearch } from "lucide-react";
+import { ArrowRight, LayoutDashboard, RotateCcw, ScanSearch, Settings2, Sparkles } from "lucide-react";
+import Link from "next/link";
 import { isAddress } from "viem";
 import type { AuraAnalysis } from "@/lib/aura/types";
 import { WalletControl } from "@/components/wallet-control";
@@ -44,60 +45,46 @@ export function AuraDashboard() {
   }
 
   return (
-    <main>
+    <main className="dashboard-page">
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="AuraLens home">
+        <Link className="brand" href="/" aria-label="AuraLens home">
           <span className="brand-mark"><ScanSearch size={20} /></span>
           <span>AuraLens</span>
-        </a>
-        <div className="header-meta"><span>Developer case study</span><WalletControl onAddress={useWalletAddress} /></div>
+        </Link>
+        <div className="header-meta"><Link href="/">Exit workspace</Link><WalletControl onAddress={useWalletAddress} /></div>
       </header>
 
-      <section className="hero" id="top">
-        <div className="hero-copy">
-          <p className="hero-label"><span /> AURA intelligence layer</p>
-          <h1>Your dApp knows the wallet. <strong>Now it knows what comes next.</strong></h1>
-          <p>See how AURA turns an EVM address into portfolio context and actionable intelligence inside another Web3 product.</p>
+      <div className="dashboard-layout">
+        <aside className="dashboard-sidebar">
+          <div className="sidebar-intro"><p>Workspace</p><h1>Wallet intelligence.</h1></div>
+          <nav className="dashboard-nav" aria-label="Workspace navigation">
+            <a className="active" href="#analyze"><LayoutDashboard size={16} /> Overview</a>
+            {analysis ? <a href="#strategies"><Sparkles size={16} /> Strategies</a> : <span aria-disabled="true"><Sparkles size={16} /> Strategies</span>}
+            {analysis ? <a href="#developer"><Settings2 size={16} /> Developer view</a> : <span aria-disabled="true"><Settings2 size={16} /> Developer view</span>}
+          </nav>
+          <div className="sidebar-foot"><span className="status-dot" /> AURA API <b>LIVE</b><p>Recommendations are informational. Review protocols and risks before acting.</p></div>
+        </aside>
+
+        <div className="dashboard-main">
+          <section className="dashboard-toolbar" id="analyze">
+            <div><p className="section-index">Analyze wallet</p><h2>What does this wallet need to know?</h2></div>
+            <form className="analysis-form" onSubmit={analyze} noValidate>
+              <label htmlFor="wallet-address">Wallet address</label>
+              <div className={`address-field ${error ? "has-error" : ""}`}>
+                <input id="wallet-address" value={address} onChange={(event) => { setAddress(event.target.value); setError(""); }} placeholder="Paste an EVM address" autoComplete="off" spellCheck={false} />
+                <button className="analyze-button" type="submit" disabled={isLoading}>{isLoading ? <RotateCcw className="spin" size={17} /> : <ArrowRight size={17} />}{isLoading ? "Analyzing" : "Analyze"}</button>
+              </div>
+              <div className="form-foot"><span>{error || "Real data from the public AURA API."}</span><button type="button" onClick={() => { setAddress(DEMO_ADDRESS); setError(""); }}>Use demo wallet</button></div>
+            </form>
+          </section>
+
+          {isLoading && <LoadingState />}
+          {!isLoading && analysis && <div id="strategies"><AnalysisResults analysis={analysis} /></div>}
+          {!isLoading && !analysis && <section className="awaiting-state"><span>READY</span><div><h2>One request. Broader wallet context.</h2><p>Run the demo wallet or connect your own address to reveal the application layer.</p></div><ScanSearch size={38} /></section>}
         </div>
+      </div>
 
-        <form className="analysis-form" onSubmit={analyze} noValidate>
-          <label htmlFor="wallet-address">Wallet address</label>
-          <div className={`address-field ${error ? "has-error" : ""}`}>
-            <input
-              id="wallet-address"
-              value={address}
-              onChange={(event) => { setAddress(event.target.value); setError(""); }}
-              placeholder="Paste an EVM address"
-              autoComplete="off"
-              spellCheck={false}
-            />
-            <button className="analyze-button" type="submit" disabled={isLoading}>
-              {isLoading ? <RotateCcw className="spin" size={17} /> : <ArrowRight size={17} />}
-              {isLoading ? "Analyzing" : "Analyze"}
-            </button>
-          </div>
-          <div className="form-foot">
-            <span>{error || "Real portfolio and strategy data from the public AURA API."}</span>
-            <button type="button" onClick={() => { setAddress(DEMO_ADDRESS); setError(""); }}>Use demo wallet</button>
-          </div>
-        </form>
-
-        <div className="pipeline" aria-label="AuraLens data flow">
-          <span>Wallet address</span><i /><span>AURA API</span><i /><span>Typed intelligence</span><i /><strong>Next action UI</strong>
-        </div>
-      </section>
-
-      {isLoading && <LoadingState />}
-      {!isLoading && analysis && <AnalysisResults analysis={analysis} />}
-      {!isLoading && !analysis && (
-        <section className="awaiting-state">
-          <span>01</span>
-          <div><h2>One request. Broader wallet context.</h2><p>Run the demo wallet or connect your own address to reveal the application layer.</p></div>
-          <ScanSearch size={38} />
-        </section>
-      )}
-
-      <footer><span>AuraLens</span><p>Application layer by AuraLens. Wallet intelligence by AURA.</p><span>2026</span></footer>
+      <footer><span>AuraLens workspace</span><p>Application layer by AuraLens. Wallet intelligence by AURA.</p><span>2026</span></footer>
     </main>
   );
 }
