@@ -1,9 +1,9 @@
 "use client";
 
-import { FormEvent, useEffect, useEffectEvent, useState } from "react";
+import { FormEvent, useState, useTransition } from "react";
 import { ArrowRight, LayoutDashboard, RotateCcw, ScanSearch, Settings2, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { isAddress } from "viem";
 import type { AuraAnalysis } from "@/lib/aura/types";
 import { WalletControl } from "@/components/wallet-control";
@@ -21,36 +21,12 @@ const viewMeta: Record<WorkspaceView, { label: string; title: string }> = {
   developer: { label: "Developer integration", title: "How does the intelligence become UI?" },
 };
 
-export function DashboardWorkspace({ view }: { view: WorkspaceView }) {
-  const searchParams = useSearchParams();
+export function DashboardWorkspace({ view, analysis, initialAddress, initialError = "" }: { view: WorkspaceView; analysis: AuraAnalysis | null; initialAddress: string; initialError?: string }) {
   const pathname = usePathname();
   const router = useRouter();
-  const queryAddress = searchParams.get("address") ?? "";
-  const [address, setAddress] = useState(queryAddress || DEMO_ADDRESS);
-  const [analysis, setAnalysis] = useState<AuraAnalysis | null>(null);
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const loadAnalysis = useEffectEvent(async (candidate: string) => {
-    setError("");
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/aura/strategies?address=${encodeURIComponent(candidate)}`);
-      const data = await response.json() as AuraAnalysis | { error?: string };
-      if (!response.ok) throw new Error("error" in data && data.error ? data.error : "Analysis failed.");
-      setAnalysis(data as AuraAnalysis);
-    } catch (caught) {
-      setAnalysis(null);
-      setError(caught instanceof Error ? caught.message : "AURA could not analyze this wallet.");
-    } finally {
-      setIsLoading(false);
-    }
-  });
-
-  useEffect(() => {
-    if (!isAddress(queryAddress)) return;
-    void loadAnalysis(queryAddress);
-  }, [queryAddress]);
+  const [address, setAddress] = useState(initialAddress || DEMO_ADDRESS);
+  const [error, setError] = useState(initialError);
+  const [isPending, startTransition] = useTransition();
 
   function analyze(event?: FormEvent) {
     event?.preventDefault();
@@ -59,8 +35,7 @@ export function DashboardWorkspace({ view }: { view: WorkspaceView }) {
       setError("Enter a valid EVM wallet address.");
       return;
     }
-    if (candidate === queryAddress) void loadAnalysis(candidate);
-    else router.push(`${pathname}?address=${encodeURIComponent(candidate)}`);
+    startTransition(() => router.push(`${pathname}?address=${encodeURIComponent(candidate)}`));
   }
 
   function useWalletAddress(nextAddress: string) {
@@ -94,18 +69,18 @@ export function DashboardWorkspace({ view }: { view: WorkspaceView }) {
             <form className="analysis-form" onSubmit={analyze} noValidate>
               <label htmlFor="wallet-address">Wallet address</label>
               <div className={`address-field ${error ? "has-error" : ""}`}>
-                <input key={queryAddress} id="wallet-address" value={address} onChange={(event) => { setAddress(event.target.value); setError(""); }} placeholder="Paste an EVM address" autoComplete="off" spellCheck={false} />
-                <button className="analyze-button" type="submit" disabled={isLoading}>{isLoading ? <RotateCcw className="spin" size={17} /> : <ArrowRight size={17} />}{isLoading ? "Analyzing" : "Analyze"}</button>
+                <input id="wallet-address" value={address} onChange={(event) => { setAddress(event.target.value); setError(""); }} placeholder="Paste an EVM address" autoComplete="off" spellCheck={false} />
+                <button className="analyze-button" type="submit" disabled={isPending}>{isPending ? <RotateCcw className="spin" size={17} /> : <ArrowRight size={17} />}{isPending ? "Analyzing" : "Analyze"}</button>
               </div>
               <div className="form-foot"><span>{error || "Real data from the public AURA API."}</span><button type="button" onClick={() => { setAddress(DEMO_ADDRESS); setError(""); }}>Use demo wallet</button></div>
             </form>
           </section>
 
-          {isLoading && <LoadingState />}
-          {!isLoading && analysis && view === "overview" && <div className="results-shell"><WalletOverview analysis={analysis} /></div>}
-          {!isLoading && analysis && view === "strategies" && <div className="results-shell"><StrategyResults analysis={analysis} /></div>}
-          {!isLoading && analysis && view === "developer" && <div className="results-shell"><DeveloperPanel analysis={analysis} /></div>}
-          {!isLoading && !analysis && <EmptyState view={view} />}
+          {isPending && <LoadingState />}
+          {!isPending && analysis && view === "overview" && <div className="results-shell"><WalletOverview analysis={analysis} /></div>}
+          {!isPending && analysis && view === "strategies" && <div className="results-shell"><StrategyResults analysis={analysis} /></div>}
+          {!isPending && analysis && view === "developer" && <div className="results-shell"><DeveloperPanel analysis={analysis} /></div>}
+          {!isPending && !analysis && <EmptyState view={view} />}
         </div>
       </div>
 

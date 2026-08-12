@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { DashboardWorkspace } from "@/components/dashboard-workspace";
+import { DashboardRoute } from "@/components/dashboard-route";
 
 export const metadata: Metadata = {
   title: "Workspace | AuraLens",
   description: "Analyze wallet context and AURA-powered strategies.",
 };
 
-export default function DashboardPage() {
-  return <Suspense><DashboardWorkspace view="overview" /></Suspense>;
+export default function DashboardPage({ searchParams }: { searchParams: Promise<{ address?: string }> }) {
+  return <DashboardRoute view="overview" searchParams={searchParams} />;
 }
