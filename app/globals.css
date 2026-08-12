@@ -83,7 +83,7 @@ h1 strong { font-weight: 680; }
 .analyze-button:hover { background: #303530; }
 .form-foot { color: var(--muted); display: flex; font-family: var(--font-mono), monospace; font-size: 10px; justify-content: space-between; line-height: 1.5; margin-top: 10px; }
 .form-foot span { color: var(--muted); }
-.form-foot button { background: none; border: 0; color: var(--signal-deep); font-family: inherit; font-size: inherit; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
+.form-foot button { background: none; border: 0; color: var(--signal-deep); font-family: inherit; font-size: inherit; min-height: 36px; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; }
 .pipeline { color: var(--muted); font-family: var(--font-mono), monospace; font-size: 10px; gap: 12px; margin-top: 83px; text-transform: uppercase; }
 .pipeline i { background: var(--line-strong); height: 1px; width: 40px; }
 .pipeline strong { color: var(--ink); font-weight: 500; }
@@ -175,7 +175,7 @@ footer p { margin: 0; }
   h1 { font-size: clamp(2.7rem, 14vw, 4.5rem); }
   .analysis-form { margin-top: 53px; }
   .address-field { height: auto; min-height: 58px; padding: 5px 0 5px 0; }
-  .address-field input { font-size: 11px; min-width: 0; }
+  .address-field input { font-size: 11px; min-width: 0; padding-left: 17px; }
   .analyze-button { min-width: 83px; padding: 0 9px; }
   .pipeline { align-items: flex-start; flex-wrap: wrap; gap: 8px; line-height: 1.5; margin-top: 57px; }
   .pipeline i { width: 18px; }
