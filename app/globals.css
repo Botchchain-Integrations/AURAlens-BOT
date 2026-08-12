@@ -261,6 +261,18 @@ footer p { margin: 0; }
 .dashboard-page .results-shell { margin-top: 22px; max-width: none; }
 .dashboard-page .overview-section, .dashboard-page .strategy-section, .dashboard-page .developer-panel { border: 1px solid var(--line); margin-top: 18px; padding: 28px; }
 .dashboard-page .overview-section { margin-top: 0; }
+.standalone-section { min-height: 500px; }
+.asset-table-toolbar { align-items: flex-end; display: flex; justify-content: space-between; margin-top: 34px; }
+.asset-table-toolbar div { display: grid; gap: 5px; }
+.asset-table-toolbar strong { font-size: 15px; font-weight: 620; }
+.asset-table-toolbar span { color: var(--muted); font-family: var(--font-mono), monospace; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; }
+.asset-table-toolbar + .asset-table { margin-top: 14px; }
+.pagination { align-items: center; border-top: 1px solid var(--line); display: flex; justify-content: space-between; margin-top: 8px; padding-top: 17px; }
+.pagination button { align-items: center; background: transparent; border: 1px solid var(--line-strong); color: var(--ink); display: flex; font-size: 11px; gap: 7px; min-height: 36px; padding: 0 12px; transition: background 160ms ease-out, transform 160ms ease-out; }
+.pagination button:not(:disabled):hover { background: var(--surface); }
+.pagination button:not(:disabled):active { transform: scale(0.98); }
+.pagination button:disabled { cursor: not-allowed; opacity: 0.4; }
+.pagination > span { color: var(--muted); font-family: var(--font-mono), monospace; font-size: 9px; text-transform: uppercase; }
 .dashboard-page .section-heading { margin-bottom: 25px; }
 .dashboard-page .balance-block strong { font-size: clamp(3rem, 5vw, 5.2rem); }
 .dashboard-page .awaiting-state { background: var(--surface); border: 1px solid var(--line); margin: 22px 0 0; max-width: none; min-height: 310px; padding: 55px; }
@@ -345,6 +357,9 @@ footer p { margin: 0; }
   .dashboard-page .asset-row > span:nth-child(2)::before { color: var(--muted); content: "Network"; display: block; font-size: 9px; margin-bottom: 5px; text-transform: uppercase; }
   .dashboard-page .asset-row > span:nth-child(3)::before { color: var(--muted); content: "Balance"; display: block; font-size: 9px; margin-bottom: 5px; text-transform: uppercase; }
   .dashboard-page .asset-row > span:nth-child(4)::before { color: var(--muted); content: "USD value"; display: block; font-size: 9px; margin-bottom: 5px; text-transform: uppercase; }
+  .asset-table-toolbar { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .pagination button { font-size: 0; min-width: 42px; padding: 0; justify-content: center; }
+  .pagination button svg { margin: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

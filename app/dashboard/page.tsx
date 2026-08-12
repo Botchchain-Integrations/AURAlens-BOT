@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { AuraDashboard } from "@/components/aura-dashboard";
+import { Suspense } from "react";
+import { DashboardWorkspace } from "@/components/dashboard-workspace";
 
 export const metadata: Metadata = {
   title: "Workspace | AuraLens",
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardPage() {
-  return <AuraDashboard />;
+  return <Suspense><DashboardWorkspace view="overview" /></Suspense>;
 }
