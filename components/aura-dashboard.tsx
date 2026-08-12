@@ -63,7 +63,6 @@ export function AuraDashboard() {
         <form className="analysis-form" onSubmit={analyze} noValidate>
           <label htmlFor="wallet-address">Wallet address</label>
           <div className={`address-field ${error ? "has-error" : ""}`}>
-            <span>0x</span>
             <input
               id="wallet-address"
               value={address}
