@@ -205,6 +205,10 @@ dd { font-size: 28px; letter-spacing: -0.06em; margin: 0; }
 .recommendation-card h4 { font-size: 21px; font-weight: 580; letter-spacing: -0.04em; line-height: 1.15; margin: 42px 0 0; max-width: 330px; }
 .recommendation-card-1 h4 { font-size: 32px; margin-top: 92px; }
 .recommendation-card p { color: var(--muted); font-size: 12px; line-height: 1.55; margin: 12px 0 0; max-width: 410px; }
+.strategy-context { background: #e9ede5; margin-top: 20px; padding: 13px 14px; }
+.strategy-context > span { color: var(--signal-deep); font-family: var(--font-mono), monospace; font-size: 8px; letter-spacing: 0.07em; text-transform: uppercase; }
+.strategy-context p { color: var(--ink); font-size: 10px; margin-top: 7px; }
+.strategy-context p strong { font-family: var(--font-mono), monospace; font-size: 12px; font-weight: 600; }
 .recommendation-meta { border-top: 1px solid var(--line); color: var(--signal-deep); font-family: var(--font-mono), monospace; font-size: 9px; margin-top: 25px; padding-top: 13px; text-transform: uppercase; }
 .recommendation-empty { border: 1px solid var(--line); color: var(--muted); font-size: 13px; grid-column: 1 / -1; padding: 30px; }
 .developer-takeaway { background: #20241f; color: #e4eadf; margin-top: 54px; padding: 42px; }

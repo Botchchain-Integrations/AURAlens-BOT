@@ -15,6 +15,13 @@ function riskClass(risk: string): string {
   return "risk-medium";
 }
 
+function formatAllocation(value: number): string {
+  if (value === 0) return "0%";
+  if (value < 0.01) return "<0.01%";
+  if (value < 1) return `${value.toFixed(2)}%`;
+  return `${value.toFixed(1)}%`;
+}
+
 export function DeveloperPanel({ analysis }: { analysis: AuraAnalysis }) {
   const endpoint = `https://aura.adex.network/api/portfolio/strategies?address=${analysis.address}`;
   const rawResponse = JSON.stringify(analysis.raw, null, 2);
@@ -23,7 +30,7 @@ export function DeveloperPanel({ analysis }: { analysis: AuraAnalysis }) {
   return (
     <section className="developer-panel" id="developer" aria-labelledby="developer-title">
       <div className="developer-hero">
-        <p className="section-index">03 / Developer integration</p>
+        <p className="section-index">03 / Application layer</p>
         <h2 id="developer-title">Give your Web3 application wallet intelligence.</h2>
         <p className="developer-lede">AuraLens uses the public AURA API to transform wallet context and AI-generated strategies into an application-specific experience.</p>
         <div className="developer-identity"><WalletCards size={16} /><span>{shortenAddress(analysis.address)}</span><b>{analysis.assetCount} assets · {analysis.networkCount} networks · {analysis.strategies.length} strategies</b></div>
@@ -68,7 +75,8 @@ export function DeveloperPanel({ analysis }: { analysis: AuraAnalysis }) {
               <div className="recommendation-card-top"><span>0{index + 1}</span><span className={`risk-label ${riskClass(strategy.risk)}`}>{strategy.risk}</span></div>
               <h4>{strategy.name}</h4>
               <p>{strategy.description ?? "A contextual opportunity identified from this wallet's portfolio."}</p>
-              <div className="recommendation-meta">{strategy.apy === undefined ? "Review opportunity" : `${strategy.apy.toFixed(2)}% estimated APY`}{strategy.network ? ` · ${strategy.network}` : ""}</div>
+              <StrategyContext analysis={analysis} tokens={strategy.tokens} />
+              <div className="recommendation-meta">{strategy.apy === undefined ? "View strategy" : `${strategy.apy.toFixed(2)}% estimated APY`}{strategy.network ? ` · ${strategy.network}` : ""}</div>
             </article>
           ))}
           {previewStrategies.length === 0 && <div className="recommendation-empty">AURA returned wallet context but no strategies for this address.</div>}
@@ -92,4 +100,24 @@ function FlowNode({ icon, label, detail, accent = false }: { icon: ReactNode; la
 
 function FlowConnector() {
   return <div className="developer-flow-connector"><i /><ArrowDown size={14} /></div>;
+}
+
+function StrategyContext({ analysis, tokens }: { analysis: AuraAnalysis; tokens?: string }) {
+  const symbols = new Set((tokens ?? "").split(",").map((symbol) => symbol.trim().toLowerCase()).filter(Boolean));
+  const positions = analysis.portfolio.flatMap((entry) => entry.tokens
+    .filter((token) => symbols.has(token.symbol.toLowerCase()))
+    .map((token) => ({ value: token.balanceUSD, network: entry.network.name })));
+
+  if (positions.length === 0) return null;
+
+  const value = positions.reduce((sum, position) => sum + position.value, 0);
+  const allocation = analysis.totalBalanceUSD > 0 ? (value / analysis.totalBalanceUSD) * 100 : 0;
+  const networks = new Set(positions.map((position) => position.network)).size;
+
+  return (
+    <div className="strategy-context">
+      <span>AuraLens interpretation</span>
+      <p><strong>{formatAllocation(allocation)}</strong> of this portfolio across {positions.length} matched {positions.length === 1 ? "asset" : "assets"} on {networks} {networks === 1 ? "network" : "networks"}.</p>
+    </div>
+  );
 }
