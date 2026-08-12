@@ -15,7 +15,7 @@ export function DeveloperPanel({ analysis }: { analysis: AuraAnalysis }) {
   };
 
   return (
-    <section className="developer-panel" aria-labelledby="developer-title">
+    <section className="developer-panel" id="developer" aria-labelledby="developer-title">
       <div className="section-heading developer-heading">
         <div>
           <p className="section-index">03 / Developer integration</p>
