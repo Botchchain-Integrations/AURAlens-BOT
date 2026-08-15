@@ -6,12 +6,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { isAddress } from "viem";
 import type { AuraAnalysis } from "@/lib/aura/types";
-import { WalletControl } from "@/components/wallet-control";
 import { WalletOverview } from "@/components/wallet-overview";
 import { StrategyResults } from "@/components/strategy-results";
 import { DeveloperPanel } from "@/components/developer-panel";
-
-const DEMO_ADDRESS = "0x3F5b96A494061F7338Da529e3047809Ac6a7FB84";
 
 type WorkspaceView = "overview" | "strategies" | "developer";
 
@@ -24,7 +21,7 @@ const viewMeta: Record<WorkspaceView, { label: string; title: string }> = {
 export function DashboardWorkspace({ view, analysis, initialAddress, initialError = "" }: { view: WorkspaceView; analysis: AuraAnalysis | null; initialAddress: string; initialError?: string }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [address, setAddress] = useState(initialAddress || DEMO_ADDRESS);
+  const [address, setAddress] = useState(initialAddress);
   const [error, setError] = useState(initialError);
   const [isPending, startTransition] = useTransition();
 
@@ -38,18 +35,13 @@ export function DashboardWorkspace({ view, analysis, initialAddress, initialErro
     startTransition(() => router.push(`${pathname}?address=${encodeURIComponent(candidate)}`));
   }
 
-  function useWalletAddress(nextAddress: string) {
-    setAddress(nextAddress);
-    setError("");
-  }
-
   const suffix = analysis ? `?address=${encodeURIComponent(analysis.address)}` : "";
 
   return (
     <main className="dashboard-page">
       <header className="site-header">
         <Link className="brand" href="/" aria-label="AuraLens home"><span className="brand-mark"><ScanSearch size={20} /></span><span>AuraLens</span></Link>
-        <div className="header-meta"><Link href="/">Exit workspace</Link><WalletControl onAddress={useWalletAddress} /></div>
+        <div className="header-meta"><Link href="/">Exit workspace</Link></div>
       </header>
 
       <div className="dashboard-layout">
@@ -67,12 +59,12 @@ export function DashboardWorkspace({ view, analysis, initialAddress, initialErro
           <section className="dashboard-toolbar">
             <div><p className="section-index">{viewMeta[view].label}</p><h2>{viewMeta[view].title}</h2></div>
             <form className="analysis-form" onSubmit={analyze} noValidate>
-              <label htmlFor="wallet-address">Wallet address</label>
+              <label htmlFor="wallet-address">Add wallet address</label>
               <div className={`address-field ${error ? "has-error" : ""}`}>
-                <input id="wallet-address" value={address} onChange={(event) => { setAddress(event.target.value); setError(""); }} placeholder="Paste an EVM address" autoComplete="off" spellCheck={false} />
+                <input id="wallet-address" value={address} onChange={(event) => { setAddress(event.target.value); setError(""); }} placeholder="Paste an EVM address to analyze" autoComplete="off" spellCheck={false} />
                 <button className="analyze-button" type="submit" disabled={isPending}>{isPending ? <RotateCcw className="spin" size={17} /> : <ArrowRight size={17} />}{isPending ? "Analyzing" : "Analyze"}</button>
               </div>
-              <div className="form-foot"><span>{error || "Real data from the public AURA API."}</span><button type="button" onClick={() => { setAddress(DEMO_ADDRESS); setError(""); }}>Use demo wallet</button></div>
+              <div className="form-foot"><span>{error || "Real data from the public AURA API."}</span></div>
             </form>
           </section>
 
@@ -90,7 +82,7 @@ export function DashboardWorkspace({ view, analysis, initialAddress, initialErro
 }
 
 function EmptyState({ view }: { view: WorkspaceView }) {
-  return <section className="awaiting-state"><span>READY</span><div><h2>Analyze a wallet to open {view === "developer" ? "the developer view" : `its ${view}`}.</h2><p>Use the demo wallet or paste any valid EVM address above.</p></div><ScanSearch size={38} /></section>;
+  return <section className="awaiting-state"><span>READY</span><div><h2>Add a wallet address to open {view === "developer" ? "the developer view" : `its ${view}`}.</h2><p>Paste any valid EVM address above to load real wallet intelligence.</p></div><ScanSearch size={38} /></section>;
 }
 
 function LoadingState() {

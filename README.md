@@ -30,8 +30,8 @@ Portfolio context + next-action UI
 
 ## Current Features
 
-- Manual EVM address analysis with a real demo wallet
-- Injected wallet connection through wagmi and viem
+- Manual EVM address analysis using an address supplied by the user
+- EVM address validation through viem
 - Server-side AURA API integration
 - Portfolio value, network, asset, and source summaries
 - AURA strategy presentation with risk and action context
