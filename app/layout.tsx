@@ -7,8 +7,8 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "AuraLens | Wallet intelligence for Web3 apps",
-  description: "A developer case study for embedding AURA wallet intelligence inside a Web3 application.",
+  title: "AuraLens | BOT Chain wallet intelligence",
+  description: "A developer case study for embedding AURA wallet intelligence inside a BOT Chain Web3 application.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

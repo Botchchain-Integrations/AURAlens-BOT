@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState, useTransition } from "react";
+import { FormEvent, useCallback, useState, useTransition } from "react";
 import { ArrowRight, LayoutDashboard, RotateCcw, ScanSearch, Settings2, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,6 +9,7 @@ import type { AuraAnalysis } from "@/lib/aura/types";
 import { WalletOverview } from "@/components/wallet-overview";
 import { StrategyResults } from "@/components/strategy-results";
 import { DeveloperPanel } from "@/components/developer-panel";
+import { WalletControl } from "@/components/wallet-control";
 
 type WorkspaceView = "overview" | "strategies" | "developer";
 
@@ -25,15 +26,20 @@ export function DashboardWorkspace({ view, analysis, initialAddress, initialErro
   const [error, setError] = useState(initialError);
   const [isPending, startTransition] = useTransition();
 
-  function analyze(event?: FormEvent) {
+  const analyze = useCallback((event?: FormEvent, candidateOverride?: string) => {
     event?.preventDefault();
-    const candidate = address.trim();
+    const candidate = (candidateOverride ?? address).trim();
     if (!isAddress(candidate)) {
       setError("Enter a valid EVM wallet address.");
       return;
     }
     startTransition(() => router.push(`${pathname}?address=${encodeURIComponent(candidate)}`));
-  }
+  }, [address, pathname, router]);
+
+  const useAddress = useCallback((nextAddress: string) => {
+    setAddress(nextAddress);
+    analyze(undefined, nextAddress);
+  }, [analyze]);
 
   const suffix = analysis ? `?address=${encodeURIComponent(analysis.address)}` : "";
 
@@ -46,13 +52,13 @@ export function DashboardWorkspace({ view, analysis, initialAddress, initialErro
 
       <div className="dashboard-layout">
         <aside className="dashboard-sidebar">
-          <div className="sidebar-intro"><p>Workspace</p><h1>Wallet intelligence.</h1></div>
+          <div className="sidebar-intro"><p>Workspace</p><h1>BOT Chain wallet intelligence.</h1></div>
           <nav className="dashboard-nav" aria-label="Workspace navigation">
             <Link className={view === "overview" ? "active" : ""} href={`/dashboard${suffix}`}><LayoutDashboard size={16} /> Overview</Link>
             <Link className={view === "strategies" ? "active" : ""} href={`/dashboard/strategies${suffix}`}><Sparkles size={16} /> Strategies</Link>
             <Link className={view === "developer" ? "active" : ""} href={`/dashboard/developer${suffix}`}><Settings2 size={16} /> Developer integration</Link>
           </nav>
-          <div className="sidebar-foot"><span className="status-dot" /> AURA API <b>LIVE</b><p>Recommendations are informational. Review protocols and risks before acting.</p></div>
+          <div className="sidebar-foot"><span className="status-dot" /> BOT Chain + AURA <b>LIVE</b><p>Recommendations are informational. Review protocols and risks before acting.</p></div>
         </aside>
 
         <div className="dashboard-main">
@@ -64,7 +70,7 @@ export function DashboardWorkspace({ view, analysis, initialAddress, initialErro
                 <input id="wallet-address" value={address} onChange={(event) => { setAddress(event.target.value); setError(""); }} placeholder="Paste an EVM address to analyze" autoComplete="off" spellCheck={false} />
                 <button className="analyze-button" type="submit" disabled={isPending}>{isPending ? <RotateCcw className="spin" size={17} /> : <ArrowRight size={17} />}{isPending ? "Analyzing" : "Analyze"}</button>
               </div>
-              <div className="form-foot"><span>{error || "Real data from the public AURA API."}</span></div>
+              <div className="form-foot"><span>{error || "Real data from the public AURA API, fused with balances read from BOT Chain."}</span><WalletControl onAddress={useAddress} /></div>
             </form>
           </section>
 
@@ -72,7 +78,7 @@ export function DashboardWorkspace({ view, analysis, initialAddress, initialErro
           {!isPending && analysis && view === "overview" && <div className="results-shell"><WalletOverview analysis={analysis} /></div>}
           {!isPending && analysis && view === "strategies" && <div className="results-shell"><StrategyResults analysis={analysis} /></div>}
           {!isPending && analysis && view === "developer" && <div className="results-shell"><DeveloperPanel analysis={analysis} /></div>}
-          {!isPending && !analysis && <EmptyState view={view} />}
+          {!isPending && !analysis && <EmptyState />}
         </div>
       </div>
 
@@ -81,10 +87,10 @@ export function DashboardWorkspace({ view, analysis, initialAddress, initialErro
   );
 }
 
-function EmptyState({ view }: { view: WorkspaceView }) {
-  return <section className="awaiting-state"><span>READY</span><div><h2>Add a wallet address to open {view === "developer" ? "the developer view" : `its ${view}`}.</h2><p>Paste any valid EVM address above to load real wallet intelligence.</p></div><ScanSearch size={38} /></section>;
+function EmptyState() {
+  return <section className="awaiting-state"><span>READY</span><div><h2>Connect a BOT Chain wallet or paste a wallet address.</h2><p>Connect for a wallet on BOT Chain, or paste any valid EVM address to load real wallet intelligence.</p></div><ScanSearch size={38} /></section>;
 }
 
 function LoadingState() {
-  return <section className="loading-state" aria-live="polite"><div className="loading-line"><span /><span /><span /></div><p>AURA is reading portfolio context and generating strategies.</p></section>;
+  return <section className="loading-state" aria-live="polite"><div className="loading-line"><span /><span /><span /></div><p>AURA is reading portfolio context, fused with balances read from BOT Chain.</p></section>;
 }

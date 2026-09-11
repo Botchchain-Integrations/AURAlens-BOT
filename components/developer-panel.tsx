@@ -3,6 +3,8 @@
 import type { ReactNode } from "react";
 import { ArrowDown, ArrowUpRight, Braces, Layers3, Sparkles, WalletCards } from "lucide-react";
 import type { AuraAnalysis } from "@/lib/aura/types";
+import { formatBotRead } from "@/lib/bot/reads";
+import { TUSDT_ADDRESS } from "@/lib/bot/chain";
 
 function shortenAddress(address: string): string {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -65,6 +67,17 @@ export function DeveloperPanel({ analysis }: { analysis: AuraAnalysis }) {
           <div className="code-window"><div className="code-meta"><span>JSON</span><span>AURA response</span></div><pre><code>{rawResponse}</code></pre></div>
         </details>
       </div>
+
+      {analysis.bot && (
+        <div className="developer-section developer-bot-vault">
+          <div className="developer-section-heading"><span><Layers3 size={15} /></span><div><h3>BOT Chain RPC read</h3><p>Balances read directly from BOT Chain (chain 968) and fused with AURA intelligence. AURA does not index BOT Chain, so AuraLens reads these balances directly.</p></div></div>
+          <div className="code-window">
+            <div className="code-meta"><span>RPC</span><span>{analysis.bot.rpcUrl} <b className="code-pill">BOT Chain · 968</b></span></div>
+            <pre><code>{`eth_getBalance(${analysis.address})\n  → ${analysis.bot.balances.nativeBOT.toFixed(4)} BOT\n\nbalanceOf(${TUSDT_ADDRESS})\n  → ${analysis.bot.balances.tusdt.toFixed(4)} USDT`}</code></pre>
+            <div className="code-meta code-meta-result"><span>Fused into analysis</span><span>{formatBotRead(analysis.bot)}</span></div>
+          </div>
+        </div>
+      )}
 
       <div className="developer-section developer-ux">
         <div className="developer-section-heading"><span>03</span><div><h3>Turn intelligence into product UX</h3><p>AURA supplies the recommendation. AuraLens decides how it becomes useful to a person.</p></div></div>

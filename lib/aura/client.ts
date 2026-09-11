@@ -1,4 +1,5 @@
 import { isAddress } from "viem";
+import { augmentWithBotChain } from "@/lib/bot/reads";
 import { normalizeAuraResponse } from "@/lib/aura/normalize";
 import type { AuraAnalysis, AuraApiResponse } from "@/lib/aura/types";
 
@@ -35,5 +36,6 @@ export async function getAuraStrategies(address: string): Promise<AuraAnalysis> 
   }
 
   const data = (await response.json()) as AuraApiResponse;
-  return normalizeAuraResponse(address, data);
+  const analysis = normalizeAuraResponse(address, data);
+  return augmentWithBotChain(analysis);
 }

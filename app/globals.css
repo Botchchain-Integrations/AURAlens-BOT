@@ -57,6 +57,7 @@ a { color: inherit; text-decoration: none; }
 .header-meta { color: var(--muted); font-family: var(--font-mono), monospace; font-size: 10px; gap: 22px; letter-spacing: 0.06em; text-transform: uppercase; }
 .wallet-connected { border: 1px solid var(--line-strong); height: 36px; }
 .wallet-address { background: transparent; border: 0; color: var(--ink); font-family: var(--font-mono), monospace; font-size: 10px; gap: 8px; height: 100%; padding: 0 11px; }
+.wallet-address b { background: var(--signal); color: #17331c; font-size: 8px; font-weight: 600; letter-spacing: 0.06em; padding: 3px 5px; text-transform: uppercase; }
 .status-dot { background: var(--signal-deep); border-radius: 100%; height: 6px; width: 6px; }
 .icon-button { background: transparent; border: 0; border-left: 1px solid var(--line-strong); height: 100%; justify-content: center; padding: 0 10px; }
 .secondary-button { background: transparent; border: 1px solid var(--line-strong); color: var(--ink); font-size: 12px; gap: 8px; height: 36px; padding: 0 14px; transition: transform 160ms ease-out, background 160ms ease-out; }
@@ -173,6 +174,9 @@ dd { font-size: 28px; letter-spacing: -0.06em; margin: 0; }
 .code-window { background: #20241f; color: #dce8d7; font-family: var(--font-mono), monospace; min-height: 225px; overflow: auto; }
 .code-meta { border-bottom: 1px solid #3b4239; color: #99a695; display: flex; font-size: 10px; justify-content: space-between; padding: 13px 18px; text-transform: uppercase; }
 .code-meta span:first-child { color: var(--signal); }
+.code-meta-result { border-top: 1px solid #3b4239; }
+.code-meta-result span:first-child { color: var(--signal); }
+.code-pill { background: var(--signal); color: #17331c !important; font-size: 8px; font-weight: 600; letter-spacing: 0.06em; margin-left: 8px; padding: 3px 5px; text-transform: uppercase; }
 .code-window pre { font-size: 11px; line-height: 1.75; margin: 0; padding: 21px 18px; white-space: pre-wrap; }
 .developer-request .code-window { min-height: 0; }
 .developer-request .code-window pre { overflow-wrap: anywhere; }

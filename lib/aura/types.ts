@@ -34,6 +34,17 @@ export type AuraStrategy = {
   protocol?: string;
 };
 
+export type AuraBotRead = {
+  chainId: string;
+  network: string;
+  rpcUrl: string;
+  explorerUrl: string;
+  balances: {
+    nativeBOT: number;
+    tusdt: number;
+  };
+};
+
 export type AuraAnalysis = {
   address: string;
   portfolio: AuraNetworkPortfolio[];
@@ -44,6 +55,7 @@ export type AuraAnalysis = {
   raw: unknown;
   cached?: boolean;
   version?: string;
+  bot?: AuraBotRead;
 };
 
 export type AuraApiResponse = {

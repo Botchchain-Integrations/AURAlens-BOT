@@ -2,8 +2,8 @@ import { ArrowRight, Layers3, ScanSearch, ShieldCheck, Sparkles } from "lucide-r
 import Link from "next/link";
 
 const steps = [
-  { number: "01", title: "Wallet context", text: "Assets, networks, balances, and USD values from a single EVM address." },
-  { number: "02", title: "AURA intelligence", text: "Strategies and risk context returned by the intelligence layer." },
+  { number: "01", title: "BOT Chain wallet", text: "Connect a BOT Chain wallet or paste any EVM address. The wallet becomes the input." },
+  { number: "02", title: "Intelligence layers", text: "AURA strategies and risk context, fused with balances read directly from BOT Chain RPC." },
   { number: "03", title: "Application UX", text: "A focused next-action experience built for your product, not ours." },
 ];
 
@@ -24,26 +24,26 @@ export function LandingPage() {
 
       <section className="landing-hero" id="top">
         <div className="landing-hero-copy">
-          <p className="hero-label"><span /> A developer application built on AURA</p>
+          <p className="hero-label"><span /> A BOT Chain application built on AURA</p>
           <h1>Give your dApp a <em>point of view.</em></h1>
-          <p className="landing-lede">Most Web3 apps show users what they own. AuraLens shows how AURA can help an app understand what may be useful next.</p>
+          <p className="landing-lede">Most Web3 apps show users what they own. AuraLens shows how an app can understand a BOT Chain wallet and surface what may be useful next.</p>
           <div className="landing-actions">
             <Link className="primary-link" href="/dashboard">Try the workspace <ArrowRight size={16} /></Link>
             <a className="text-link" href="#how">See the integration <ArrowRight size={15} /></a>
           </div>
-          <p className="landing-note">No wallet transaction required. Just intelligence.</p>
+          <p className="landing-note">Connect a wallet on BOT Chain testnet. No transaction required. Just intelligence.</p>
         </div>
 
         <div className="architecture-card" aria-label="AuraLens integration architecture">
           <div className="architecture-topline"><span>Application architecture</span><span>01 / 03</span></div>
           <div className="architecture-flow">
-            <div className="flow-node flow-user"><span className="flow-icon"><Layers3 size={17} /></span><div><small>Input</small><strong>Wallet address</strong></div></div>
-            <div className="flow-connector"><i /><span>request</span></div>
+            <div className="flow-node flow-user"><span className="flow-icon"><Layers3 size={17} /></span><div><small>Input</small><strong>BOT Chain wallet</strong></div></div>
+            <div className="flow-connector"><i /><span>read + request</span></div>
             <div className="flow-node flow-aura"><span className="flow-icon"><Sparkles size={17} /></span><div><small>Intelligence layer</small><strong>AURA API</strong></div></div>
             <div className="flow-connector"><i /><span>normalize</span></div>
             <div className="flow-node flow-output"><span className="flow-icon"><ShieldCheck size={17} /></span><div><small>Our experience</small><strong>Next action UI</strong></div></div>
           </div>
-          <div className="architecture-code"><span>GET</span><code>/api/portfolio/strategies?address=</code><b>0x...</b></div>
+          <div className="architecture-code"><span>GET</span><code>/api/portfolio/strategies?address=</code><b>0x...</b><span>+</span><code>rpc.bohr.life</code></div>
         </div>
       </section>
 
@@ -61,7 +61,7 @@ export function LandingPage() {
       </section>
 
       <section className="landing-cta">
-        <div><p className="section-index">See it in practice</p><h2>Don&apos;t build another wallet dashboard.</h2><p>Build the layer that helps your application make better use of the wallet context it already has.</p></div>
+        <div><p className="section-index">See it in practice</p><h2>Don&apos;t build another wallet dashboard.</h2><p>Build the layer that turns BOT Chain wallet context into action for your product.</p></div>
         <Link className="primary-link" href="/dashboard">Open AuraLens <ArrowRight size={16} /></Link>
       </section>
 

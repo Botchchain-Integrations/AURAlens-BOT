@@ -3,7 +3,7 @@ import { DashboardRoute } from "@/components/dashboard-route";
 
 export const metadata: Metadata = {
   title: "Workspace | AuraLens",
-  description: "Analyze wallet context and AURA-powered strategies.",
+  description: "Analyze BOT Chain wallet context and AURA-powered strategies.",
 };
 
 export default function DashboardPage({ searchParams }: { searchParams: Promise<{ address?: string }> }) {
