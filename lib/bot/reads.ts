@@ -44,13 +44,14 @@ export async function augmentWithBotChain(analysis: AuraAnalysis): Promise<AuraA
 
   const tokens = buildBotTokens(balances);
   const botEntry = buildBotEntry(balances);
+  if (tokens.length === 0) return analysis;
 
   return {
     ...analysis,
-    portfolio: [...analysis.portfolio, botEntry],
-    totalBalanceUSD: analysis.totalBalanceUSD, // BOT testnet assets are not priced by AURA
-    networkCount: analysis.networkCount + 1,
-    assetCount: analysis.assetCount + tokens.length,
+    portfolio: [botEntry],
+    totalBalanceUSD: 0,
+    networkCount: 1,
+    assetCount: tokens.length,
     bot: {
       chainId: "968",
       network: "BOT Chain Testnet",

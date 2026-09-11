@@ -9,10 +9,12 @@ const PAGE_SIZE = 25;
 
 export function WalletOverview({ analysis }: { analysis: AuraAnalysis }) {
   const [page, setPage] = useState(1);
-  const lowBalance = analysis.totalBalanceUSD < 10;
+  const botOnly = analysis.portfolio.length === 1 && analysis.portfolio[0].network.chainId === "968";
+  const botAssets = botOnly ? analysis.portfolio[0].tokens : [];
+  const lowBalance = !botOnly && analysis.totalBalanceUSD < 10;
   const assets = analysis.portfolio
     .flatMap((entry) => entry.tokens.map((token) => ({ token, network: entry.network })))
-    .sort((left, right) => right.token.balanceUSD - left.token.balanceUSD);
+    .sort((left, right) => botOnly ? right.token.balance - left.token.balance : right.token.balanceUSD - left.token.balanceUSD);
   const pageCount = Math.max(1, Math.ceil(assets.length / PAGE_SIZE));
   const visibleAssets = assets.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
@@ -20,20 +22,20 @@ export function WalletOverview({ analysis }: { analysis: AuraAnalysis }) {
     <section className="overview-section standalone-section" aria-labelledby="overview-title">
       <div className="section-heading">
         <div><p className="section-index">01 / Wallet context</p><h2 id="overview-title">What the app knows.</h2></div>
-        <span className="api-stamp">AURA {analysis.version ?? "API"}</span>
+        <span className="api-stamp">AURA + BOT Chain RPC</span>
       </div>
 
       <div className="overview-grid">
         <div className="balance-block">
-          <span>Estimated portfolio</span>
-          <strong>{formatCurrency(analysis.totalBalanceUSD)}</strong>
-          <p>{lowBalance ? "Low balance detected. AURA is prioritizing foundational next steps." : "Portfolio context is informing the opportunities available in the Strategies view."}</p>
+          <span>{botOnly ? "BOT Chain balance" : "Estimated portfolio"}</span>
+          <strong>{botOnly ? botAssets.map((t) => `${formatTokenBalance(t.balance)} ${t.symbol}`).join(" · ") : formatCurrency(analysis.totalBalanceUSD)}</strong>
+          <p>{botOnly ? "Asset totals on BOT Chain testnet, read via RPC. Testnet balances are not USD-priced." : lowBalance ? "Low balance detected. AURA is prioritizing foundational next steps." : "Portfolio context is informing the opportunities available in the Strategies view."}</p>
         </div>
         <dl className="metrics-grid">
           <div><dt>Networks</dt><dd>{analysis.networkCount}</dd></div>
           <div><dt>Assets</dt><dd>{analysis.assetCount}</dd></div>
           <div><dt>Strategies</dt><dd>{analysis.strategies.length}</dd></div>
-          <div><dt>Source</dt><dd>{analysis.cached ? "Cached" : "Live"}</dd></div>
+          <div><dt>Source</dt><dd>{botOnly ? "BOT RPC" : analysis.cached ? "Cached" : "Live"}</dd></div>
         </dl>
       </div>
 
