@@ -30,13 +30,13 @@ describe("buildBotEntry", () => {
   it("maps the BOT Chain network with explorer and ISO-style chain id", () => {
     const entry = buildBotEntry({ nativeBOT: 1, tusdt: 1 });
     expect(entry.network).toEqual({
-      name: "BOT Chain Testnet",
-      chainId: "968",
-      explorerUrl: "https://scan.bohr.life",
+      name: "BOT Chain",
+      chainId: "677",
+      explorerUrl: "https://scan.botchain.ai",
     });
   });
 
-  it("reports a zero USD total because AURA prices testnet assets as unknown", () => {
+  it("reports a zero USD total because AURA prices BOT Chain assets as unknown", () => {
     const entry = buildBotEntry({ nativeBOT: 10, tusdt: 100 });
     expect(entry.totalBalanceUSD).toBe(0);
   });
@@ -45,10 +45,10 @@ describe("buildBotEntry", () => {
 describe("formatBotRead", () => {
   it("joins non-zero balances in a readable summary", () => {
     const read = {
-      chainId: "968",
+      chainId: "677",
       network: "BOT Chain Testnet",
-      rpcUrl: "https://rpc.bohr.life",
-      explorerUrl: "https://scan.bohr.life",
+      rpcUrl: "https://rpc.botchain.ai",
+      explorerUrl: "https://scan.botchain.ai",
       balances: { nativeBOT: 22.929, tusdt: 909.4 },
     };
     expect(formatBotRead(read)).toBe("22.9290 BOT · 909.4000 USDT");
@@ -56,10 +56,10 @@ describe("formatBotRead", () => {
 
   it("falls back to a discovery message when the wallet has no BOT Chain assets", () => {
     const read = {
-      chainId: "968",
+      chainId: "677",
       network: "BOT Chain Testnet",
-      rpcUrl: "https://rpc.bohr.life",
-      explorerUrl: "https://scan.bohr.life",
+      rpcUrl: "https://rpc.botchain.ai",
+      explorerUrl: "https://scan.botchain.ai",
       balances: { nativeBOT: 0, tusdt: 0 },
     };
     expect(formatBotRead(read)).toBe("No BOT Chain assets found");

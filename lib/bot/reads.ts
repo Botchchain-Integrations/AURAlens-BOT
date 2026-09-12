@@ -53,10 +53,10 @@ export async function augmentWithBotChain(analysis: AuraAnalysis): Promise<AuraA
     networkCount: 1,
     assetCount: tokens.length,
     bot: {
-      chainId: "968",
-      network: "BOT Chain Testnet",
+      chainId: "677",
+      network: "BOT Chain",
       rpcUrl: botChain.rpcUrls.default.http[0],
-      explorerUrl: "https://scan.bohr.life",
+      explorerUrl: "https://scan.botchain.ai",
       balances,
     },
   };
@@ -87,9 +87,9 @@ export function buildBotTokens(balances: BotBalances): AuraToken[] {
 export function buildBotEntry(balances: BotBalances): AuraNetworkPortfolio {
   return {
     network: {
-      name: "BOT Chain Testnet",
-      chainId: "968",
-      explorerUrl: "https://scan.bohr.life",
+      name: "BOT Chain",
+      chainId: "677",
+      explorerUrl: "https://scan.botchain.ai",
     },
     tokens: buildBotTokens(balances),
     totalBalanceUSD: 0,

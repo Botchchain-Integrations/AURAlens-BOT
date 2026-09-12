@@ -9,7 +9,7 @@ const PAGE_SIZE = 25;
 
 export function WalletOverview({ analysis }: { analysis: AuraAnalysis }) {
   const [page, setPage] = useState(1);
-  const botOnly = analysis.portfolio.length === 1 && analysis.portfolio[0].network.chainId === "968";
+  const botOnly = analysis.portfolio.length === 1 && analysis.portfolio[0].network.chainId === "677";
   const botAssets = botOnly ? analysis.portfolio[0].tokens : [];
   const lowBalance = !botOnly && analysis.totalBalanceUSD < 10;
   const assets = analysis.portfolio
@@ -29,7 +29,7 @@ export function WalletOverview({ analysis }: { analysis: AuraAnalysis }) {
         <div className="balance-block">
           <span>{botOnly ? "BOT Chain balance" : "Estimated portfolio"}</span>
           <strong>{botOnly ? botAssets.map((t) => `${formatTokenBalance(t.balance)} ${t.symbol}`).join(" · ") : formatCurrency(analysis.totalBalanceUSD)}</strong>
-          <p>{botOnly ? "Asset totals on BOT Chain testnet, read via RPC. Testnet balances are not USD-priced." : lowBalance ? "Low balance detected. AURA is prioritizing foundational next steps." : "Portfolio context is informing the opportunities available in the Strategies view."}</p>
+          <p>{botOnly ? "Asset totals on BOT Chain, read via RPC." : lowBalance ? "Low balance detected. AURA is prioritizing foundational next steps." : "Portfolio context is informing the opportunities available in the Strategies view."}</p>
         </div>
         <dl className="metrics-grid">
           <div><dt>Networks</dt><dd>{analysis.networkCount}</dd></div>

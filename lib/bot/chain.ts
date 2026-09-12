@@ -1,18 +1,18 @@
 import { defineChain } from "viem";
 
 export const botChain = defineChain({
-  id: 968,
-  name: "BOT Chain Testnet",
+  id: 677,
+  name: "BOT Chain",
   nativeCurrency: { name: "BOT", symbol: "BOT", decimals: 18 },
   rpcUrls: {
-    default: { http: ["https://rpc.bohr.life"] },
+    default: { http: ["https://rpc.botchain.ai"] },
   },
   blockExplorers: {
-    default: { name: "BOT Explorer", url: "https://scan.bohr.life" },
+    default: { name: "BOT Explorer", url: "https://scan.botchain.ai" },
   },
 });
 
-export const TUSDT_ADDRESS = "0x75edC9335175Fc0552D51D48439F229c10420fe3";
+export const TUSDT_ADDRESS = "0xaBabc7Ddc03e501d190C676BF3d92ef0e6e87a3C";
 
 export const TUSDT_ABI = [
   {

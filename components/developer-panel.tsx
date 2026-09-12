@@ -70,9 +70,9 @@ export function DeveloperPanel({ analysis }: { analysis: AuraAnalysis }) {
 
       {analysis.bot && (
         <div className="developer-section developer-bot-vault">
-          <div className="developer-section-heading"><span><Layers3 size={15} /></span><div><h3>BOT Chain RPC read</h3><p>Balances read directly from BOT Chain (chain 968) and fused with AURA intelligence. AURA does not index BOT Chain, so AuraLens reads these balances directly.</p></div></div>
+          <div className="developer-section-heading"><span><Layers3 size={15} /></span><div><h3>BOT Chain RPC read</h3><p>Balances read directly from BOT Chain (chain 677) and fused with AURA intelligence. AURA does not index BOT Chain, so AuraLens reads these balances directly.</p></div></div>
           <div className="code-window">
-            <div className="code-meta"><span>RPC</span><span>{analysis.bot.rpcUrl} <b className="code-pill">BOT Chain · 968</b></span></div>
+            <div className="code-meta"><span>RPC</span><span>{analysis.bot.rpcUrl} <b className="code-pill">BOT Chain · 677</b></span></div>
             <pre><code>{`eth_getBalance(${analysis.address})\n  → ${analysis.bot.balances.nativeBOT.toFixed(4)} BOT\n\nbalanceOf(${TUSDT_ADDRESS})\n  → ${analysis.bot.balances.tusdt.toFixed(4)} USDT`}</code></pre>
             <div className="code-meta code-meta-result"><span>Fused into analysis</span><span>{formatBotRead(analysis.bot)}</span></div>
           </div>

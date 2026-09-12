@@ -31,7 +31,7 @@ Portfolio context + next-action UI
 
 ## Current Features
 
-- Connect a wallet and analyze it on BOT Chain (chain 968, `rpc.bohr.life`)
+- Connect a wallet and analyze it on BOT Chain (chain 677, `rpc.botchain.ai`)
 - Manual EVM address analysis using an address supplied by the user
 - EVM address validation through viem
 - Server-side AURA API integration, kept as the intelligence layer
@@ -54,17 +54,17 @@ Portfolio context + next-action UI
 
 ## BOT Chain Integration
 
-AuraLens reads balances from BOT Chain (chain 968) directly:
+AuraLens reads balances from BOT Chain (chain 677) directly:
 
 ```text
-Network:  BOT Chain Testnet (chain 968)
-RPC:      https://rpc.bohr.life
-Explorer: https://scan.bohr.life
+Network:  BOT Chain (chain 677)
+RPC:      https://rpc.botchain.ai
+Explorer: https://scan.botchain.ai
 Native:   BOT (18 decimals)
-tUSDT:    0x75edC9335175Fc0552D51D48439F229c10420fe3 (6 decimals)
+USDT:    0xaBabc7Ddc03e501d190C676BF3d92ef0e6e87a3C (6 decimals)
 ```
 
-The wagmi config includes BOT Chain first, so a connected wallet is switched to chain 968 and analyzed automatically.
+The wagmi config includes BOT Chain first, so a connected wallet is switched to chain 677 and analyzed automatically.
 Native BOT and tUSDT balances are read via `eth_getBalance` and `balanceOf` during analysis and appended to the AURA portfolio as a BOT Chain network entry.
 
 ## AURA Integration

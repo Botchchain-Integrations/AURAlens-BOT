@@ -43,7 +43,7 @@ export function LandingPage() {
             <div className="flow-connector"><i /><span>normalize</span></div>
             <div className="flow-node flow-output"><span className="flow-icon"><ShieldCheck size={17} /></span><div><small>Our experience</small><strong>Next action UI</strong></div></div>
           </div>
-          <div className="architecture-code"><span>GET</span><code>/api/portfolio/strategies?address=</code><b>0x...</b><span>+</span><code>rpc.bohr.life</code></div>
+          <div className="architecture-code"><span>GET</span><code>/api/portfolio/strategies?address=</code><b>0x...</b><span>+</span><code>rpc.botchain.ai</code></div>
         </div>
       </section>
 
